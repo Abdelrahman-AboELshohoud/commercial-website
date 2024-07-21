@@ -45,7 +45,7 @@ export default function NavIcons() {
       >
         <Image src="/cart.png" alt="" width={22} height={22} />
         <div className="absolute -top-4 -right-4 w-6 h-6 bg-f rounded-full text-sm text-white flex items-center justify-center">
-          2 4207d8b4-6a82-49bb-8160-b2f2832558bb
+          2
         </div>
       </div>
       {isCartOpen && <CartModal />}
