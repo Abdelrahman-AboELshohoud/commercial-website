@@ -5,8 +5,9 @@ import ProductList from "../components/ProductList";
 import Categories from "../components/Categories";
 import { useContext, useEffect } from "react";
 import { WixClientContext } from "@/context/wixContext";
+import { useWixClient } from "../hooks/useWixClient";
 const HomePage = () => {
-  const wixClient = useContext(WixClientContext);
+  const wixClient = useWixClient();
   useEffect(() => {
     const getProducts = async () => {
       const res = await wixClient.products.queryProducts().find();
