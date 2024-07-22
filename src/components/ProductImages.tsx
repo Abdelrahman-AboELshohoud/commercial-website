@@ -17,13 +17,13 @@ const images = [
     img: "https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
 ];
-export default function ProductImages() {
+export default function ProductImages({ items }: { items: any }) {
   const [Index, setIndex] = useState(0);
   return (
     <div>
       <div className="h-[500px] relative">
         <Image
-          src={images[Index].img}
+          src={items[Index].image?.url}
           alt=""
           fill
           sizes="30vw"
@@ -31,14 +31,14 @@ export default function ProductImages() {
         />
       </div>
       <div className="flex flex-row justify-between gap-2 mt-2">
-        {images.map((image, i) => (
+        {items.map((item: any, i: number) => (
           <div
             key={i}
             className="w-1/4 h-32 relative gap-4 mt-8 cursor-pointer"
             onClick={() => setIndex(i)}
           >
             <Image
-              src={image.img}
+              src={item.image?.url}
               alt=""
               fill
               sizes="30vw"
