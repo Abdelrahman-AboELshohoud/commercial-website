@@ -2,14 +2,22 @@
 
 import React, { useState } from "react";
 
-export default function Add() {
+export default function Add({
+  productId,
+  variantId,
+  stockNumber,
+}: {
+  productId: string | undefined;
+  variantId: string;
+  stockNumber: number;
+}) {
   const [quantity, setQuantity] = useState(1);
-  const stock = 4;
-  const handleQuantity = (type) => {
+  // const stock = 4;
+  const handleQuantity = (type: "i" | "d") => {
     if (type === "d" && quantity > 1) {
       setQuantity((prev) => prev - 1);
     }
-    if (type === "i" && quantity < stock) {
+    if (type === "i" && quantity < stockNumber) {
       setQuantity((prev) => prev + 1);
     }
   };
@@ -30,13 +38,14 @@ export default function Add() {
             <button
               className="cursor-pointer text-xl disabled:text-gray-300 disabled:cursor-not-allowed"
               onClick={() => handleQuantity("i")}
-              disabled={quantity === stock}
+              disabled={quantity === stockNumber}
             >
               +
             </button>
           </div>
           <div className="text-sm">
-            Only <span className="text-orange-500">4 items</span> left!
+            Only <span className="text-orange-500">{stockNumber} items</span>{" "}
+            left!
             <br /> {"Don't "}miss it
           </div>
         </div>

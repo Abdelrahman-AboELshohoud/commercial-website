@@ -19,6 +19,8 @@ export default async function SinglePage({
   }
   console.log(products);
   const product = products.items[0];
+  console.log(product.variants);
+  // console.log("options", product.productOptions, "option");
   return (
     <div className="flex flex-col lg:flex-row gap-16 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative">
       <div className="w-full lg:w-1/2 lg:sticky top-20 h-max ">
@@ -44,8 +46,19 @@ export default async function SinglePage({
           </div>
         )}
         <div className="h-[2px] text-gray-100" />
-        <CustomizeProducts />
-        <Add />
+        {product.variants && product.productOptions ? (
+          <CustomizeProducts
+            productId={product._id}
+            variants={product.variants}
+            productOptions={product.productOptions}
+          />
+        ) : (
+          <Add
+            productId={product._id}
+            variantId="00000000-000000-000000-000000000001"
+            stockNumber={product.stock?.quantity || 0}
+          />
+        )}
         <div className="h-[2px] text-gray-100" />
         {product.additionalInfoSections?.map((item, i) => (
           <div className="text-sm" key={i}>
