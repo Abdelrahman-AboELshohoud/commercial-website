@@ -16,16 +16,31 @@ export default async function ProductList({
   searchParams?: any;
 }) {
   const wixClient = await wixClientServer();
-  console.log(
-    wixClient.products.queryProducts().eq("collectionIds", categoryId),
-    "xxxxxxxxxxxx"
-  );
-  const res = await wixClient.products
+  // console.log(
+  //   wixClient.products.queryProducts().eq("collectionIds", categoryId),
+  //   "xxxxxxxxxxxx"
+  // );
+  const prodcutQuery = wixClient.products
     .queryProducts()
+    .startsWith("name", searchParams?.name || "")
     .eq("collectionIds", categoryId)
-    .limit(limit || productsPerPage)
-    .find();
-
+    .hasSome(
+      "productType",
+      searchParams.type ? [searchParams.type] : ["physical", "digital"]
+    )
+    .gt("priceData.price", searchParams?.min || 0)
+    .lt("priceData.price", searchParams?.max || 99999999999)
+    .limit(limit || productsPerPage);
+  if (searchParams?.sort) {
+    const [sortType, sortBy] = searchParams.sort.split(" ");
+    if (sortType === "desc") {
+      prodcutQuery.ascending(sortBy);
+    }
+    if (sortType === "asc") {
+      prodcutQuery.descending(sortBy);
+    }
+  }
+  const res = await prodcutQuery.find();
   // console.log(res.items[1].additionalInfoSections[0].description);
   return (
     <div className=" mt-12 flex gap-8 gap-y-16 flex-wrap flex-row justify-between">

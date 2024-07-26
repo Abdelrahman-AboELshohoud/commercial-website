@@ -1,6 +1,21 @@
+"use client";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
 export default function Filter() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  console.log("xxxxxxxx", pathname, "xxxxxxxx", searchParams, "xxxx");
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    const params = new URLSearchParams(searchParams);
+    params.set(name, value);
+    replace(`${pathname}?${params.toString()}`);
+  };
   return (
     <div className="mt-12 flex justify-between">
       <div className="flex gap-6 flex-wrap">
@@ -8,6 +23,7 @@ export default function Filter() {
           name="type"
           id=""
           className="py-2 px-4 rounded-2xl text-xs font-medium bg-[#EBEDED]"
+          onChange={handleFilterChange}
         >
           <option>Type</option>
           <option value="physical" className="">
@@ -22,12 +38,14 @@ export default function Filter() {
           type="text"
           placeholder="Min Price"
           className="text-xs rounded-2xl pl-2 w-24 ring-gray-500"
+          onChange={handleFilterChange}
         />
         <input
           name="max"
           type="text"
           placeholder="Max Price"
           className="text-xs rounded-2xl pl-2 w-24 ring-gray-500"
+          onChange={handleFilterChange}
         />
         <select
           name="cat"
@@ -50,6 +68,7 @@ export default function Filter() {
           name="sort"
           id=""
           className="py-2 px-4 rounded-2xl text-xs font-medium bg-white ring-1 ring-gray-400"
+          onChange={handleFilterChange}
         >
           <option>Sort By</option>
           <option value="asc price">Price (low to high)</option>
