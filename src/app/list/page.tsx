@@ -26,7 +26,9 @@ export default async function Page({ searchParams }: { searchParams: any }) {
         </div>
       </div>
       <Filter />
-      <h1 className="text-xl font-semibold mt-12">Shoes For You!</h1>
+      <h1 className="text-xl font-semibold mt-12">
+        {(await cat).collection?.name} For You!
+      </h1>
 
       <Suspense fallback={"loading..."}>
         <ProductList
