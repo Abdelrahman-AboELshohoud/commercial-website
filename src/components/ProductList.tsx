@@ -3,8 +3,9 @@ import { products } from "@wix/stores";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import Pagination from "./Pagination";
 
-const productsPerPage = 20;
+const productsPerPage = 4;
 
 export default async function ProductList({
   categoryId,
@@ -20,28 +21,35 @@ export default async function ProductList({
   //   wixClient.products.queryProducts().eq("collectionIds", categoryId),
   //   "xxxxxxxxxxxx"
   // );
-  const prodcutQuery = wixClient.products
+  const productQuery = wixClient.products
     .queryProducts()
     .startsWith("name", searchParams?.name || "")
     .eq("collectionIds", categoryId)
     .hasSome(
       "productType",
-      searchParams.type ? [searchParams.type] : ["physical", "digital"]
+      searchParams?.type ? [searchParams.type] : ["physical", "digital"]
     )
     .gt("priceData.price", searchParams?.min || 0)
     .lt("priceData.price", searchParams?.max || 99999999999)
-    .limit(limit || productsPerPage);
+    .limit(limit || productsPerPage)
+    .skip(
+      searchParams?.page
+        ? parseInt(searchParams.page) * (limit || productsPerPage)
+        : 0
+    );
   if (searchParams?.sort) {
     const [sortType, sortBy] = searchParams.sort.split(" ");
-    if (sortType === "desc") {
-      prodcutQuery.ascending(sortBy);
-    }
+
     if (sortType === "asc") {
-      prodcutQuery.descending(sortBy);
+      productQuery.ascending(sortBy);
+    }
+    if (sortType === "desc") {
+      productQuery.descending(sortBy);
     }
   }
-  const res = await prodcutQuery.find();
-  // console.log(res.items[1].additionalInfoSections[0].description);
+
+  const res = await productQuery.find();
+
   return (
     <div className=" mt-12 flex gap-8 gap-y-16 flex-wrap flex-row justify-between">
       {res.items.map((item: products.Product, i) => (
@@ -81,6 +89,11 @@ export default async function ProductList({
           </button>
         </Link>
       ))}
+      <Pagination
+        currentPage={res.currentPage || 0}
+        hasPrev={res.hasPrev()}
+        hasNext={res.hasNext()}
+      />
     </div>
   );
 }
