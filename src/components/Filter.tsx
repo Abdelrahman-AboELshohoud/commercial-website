@@ -7,7 +7,7 @@ export default function Filter() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
-  console.log("xxxxxxxx", pathname, "xxxxxxxx", searchParams, "xxxx");
+  // console.log("xxxxxxxx", pathname, "xxxxxxxx", searchParams, "xxxx");
   const handleFilterChange = (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
